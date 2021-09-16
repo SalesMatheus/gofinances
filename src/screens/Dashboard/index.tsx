@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import { HighlightCard } from '../../Components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../Components/TransactionCard';
@@ -32,7 +34,7 @@ export function Dashboard() {
     const dataKey = '@gofinances:transactions';
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
-
+    
     const transactionsFormatted: DataListProps[] = transactions
     .map((item: DataListProps) => {
 
@@ -64,6 +66,10 @@ export function Dashboard() {
     loadTransactions()
   },[]);
 
+  useFocusEffect(useCallback(() => {
+    loadTransactions();
+  },[]));
+  
   return (
     <Container>
       <Header>
