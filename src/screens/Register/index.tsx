@@ -52,8 +52,6 @@ export function Register() {
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
-    const dataKey = '@gofinances:transactions';
-
     const [category, setCategory] = useState({
         key: 'category',
         name: 'categoria'
@@ -83,6 +81,7 @@ export function Register() {
     }
 
     async function handleRegister(form: FormData) {
+
         if(!transactionType)
             return Alert.alert('Selecione o tipo da transação');
 
@@ -101,6 +100,8 @@ export function Register() {
         }
         
         try {
+            const dataKey = '@gofinances:transactions';
+
             const dataStorage = await AsyncStorage.getItem(dataKey);
             const currentData = dataStorage ? JSON.parse(dataStorage): [];
 
@@ -121,7 +122,7 @@ export function Register() {
             navigation.navigate('Listagem');
 
         } catch (error) {
-            console.log(errors);
+            console.log(error);
             Alert.alert("Não foi possível salvar");
         }
     }
