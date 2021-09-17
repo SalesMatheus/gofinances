@@ -42,7 +42,7 @@ interface HighlightData {
 }
 
 export function Dashboard() {
-  const [ isloading, setIsloading] = useState(true);
+  const [ isLoading, setIsloading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
 
@@ -141,7 +141,7 @@ export function Dashboard() {
   return (
     <Container>
       {
-        isloading 
+        isLoading 
         ? 
           <LoadContainer>
             <ActivityIndicator 
