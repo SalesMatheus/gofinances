@@ -29,7 +29,7 @@ export function SignIn() {
         <Container>
           <Header>
               <TitleWrapper>
-                  <LogoSvg 
+                  <LogoSvg  
                     width={RFValue(130)}
                     height={RFValue(68)}
                   />
