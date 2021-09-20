@@ -53,15 +53,21 @@ export function Dashboard() {
 
   function getLastTransactionDate(colletion: DataListProps[], type: 'up' | 'down'){
 
-    const lastTransaction = new Date(Math.max.apply(Math, colletion
-      .filter(transaction => transaction.type === type)
+    const collectionFilttered = colletion
+    .filter(transaction => transaction.type === type);
+
+    if(collectionFilttered.length === 0){
+      return 0
+    }
+
+    const lastTransaction = new Date(Math.max.apply(Math, collectionFilttered
       .map(transaction => new Date(transaction.date).getTime())));
   
       return  `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', {month: 'long'})}`
   }
 
   async function loadTransactions(){
-    const dataKey = '@gofinances:transactions';
+    const dataKey = `@gofinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
     
@@ -114,21 +120,27 @@ export function Dashboard() {
           style: 'currency', 
           currency: 'BRL'
         }),
-        lastTransaction: `Última entrada dia ${lastTransactionsEntries}`
+        lastTransaction: lastTransactionsEntries === 0 
+        ? 'Não há transações' 
+        : `Última entrada dia ${lastTransactionsEntries}`
       },
       expensives: {
         amount: expensiveTotal.toLocaleString('pt-BR', {
           style: 'currency', 
           currency: 'BRL'
         }),
-        lastTransaction: `Última saída dia ${lastTransactionsExpensive}`
+        lastTransaction: lastTransactionsEntries === 0 
+        ? 'Não há transações'
+        : `Última saída dia ${lastTransactionsExpensive}`
       },
       total: {
         amount: total.toLocaleString('pt-BR', {
           style: 'currency', 
           currency: 'BRL'
         }),
-        lastTransaction: totalInterval
+        lastTransaction: lastTransactionsEntries === 0 
+        ? 'Não há transações'
+        : totalInterval
       }
     });
     setIsloading(false);

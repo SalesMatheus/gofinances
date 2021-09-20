@@ -9,6 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useTheme } from "styled-components";
+import { useAuth } from "../../hooks/auth";
 
 import { HistoryCard } from "../../Components/HistoryCard";
 import { categories } from "../../utils/categories";
@@ -51,7 +52,7 @@ export function Resume() {
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
 
     const theme = useTheme();
-
+    const { user } = useAuth();
 
     function handleDateChange(action: 'next' | 'prev') {
 
@@ -67,7 +68,7 @@ export function Resume() {
         
         setIsLoading(true);
 
-        const dataKey = '@gofinances:transactions';
+        const dataKey = `@gofinances:transactions_user:${user.id}`;
 
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response): [];
