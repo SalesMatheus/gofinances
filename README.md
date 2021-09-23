@@ -23,7 +23,7 @@ This applications is an personal finance manager.
 </p>
 
 
-## 🚀 Como executar
+## 🚀 Como  executar
 
 Utilize o **yarn** ou o **npm install** para instalar as dependências do projeto.
 Em seguida, inicie o projeto.
