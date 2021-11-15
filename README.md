@@ -22,6 +22,27 @@ This applications is an personal finance manager.
   </a>&nbsp;&nbsp;
 </p>
 
+## 🧪 Pacotes
+
+- expo-font
+- @expo-google-fonts/poppins
+- expo-app-loading
+- prettier
+- styled-components
+- react-native-responsive-fontsize
+- react-native-iphone-x-helper
+- [react-hook-form](https://react-hook-form.com/)
+- [@react-navigation/native](https://reactnavigation.org/)
+- [@react-navigation/bottom-tabs](https://reactnavigation.org/)
+- [date-fns](https://date-fns.org/)
+- [victory-native](https://formidable.com/open-source/victory/)
+- intl
+- @react-native-async-storage/async-storage
+- react-native-uuid
+- react-native-svg-transformer
+- [expo-auth-session](https://docs.expo.dev/versions/latest/sdk/auth-session/)
+- expo-random
+
 
 ## 🚀 Como  executar
 
