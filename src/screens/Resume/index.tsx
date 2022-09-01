@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator } from 'react-native'; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { VictoryPie } from 'victory-native';
+import { VictoryAxis, VictoryChart, VictoryLabel, VictoryLegend, VictoryLine, VictoryPie, VictoryScatter, VictoryTheme } from 'victory-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import { addMonths, subMonths, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -165,7 +165,10 @@ export function Resume() {
                     </MonthSelect>
 
                     <ChartContainer>
-                        <VictoryPie 
+                        <VictoryPie
+                            cornerRadius={8}
+                            padAngle={3}
+                            innerRadius={80}
                             data={totalByCategories}
                             colorScale={totalByCategories.map(category => category.color)}
                             style={{
@@ -179,6 +182,10 @@ export function Resume() {
                             x="percent"
                             y="total"
                         />
+                        {/* <VictoryLegend 
+                            data={totalByCategories} 
+                            colorScale={totalByCategories.map(category => category.color)}
+                        /> */}
                     </ChartContainer>
                     
                     {
@@ -191,6 +198,42 @@ export function Resume() {
                             />
                         ))
                     }
+                    <VictoryChart theme={VictoryTheme.material} >
+                        <VictoryAxis/>
+                        <VictoryScatter 
+                            size={5} 
+                            data={totalByCategories} 
+                            x="key"
+                            y="total"
+                            style={{ 
+                            data: { fill: "#113259" } 
+                            }}
+                        />
+                        <VictoryLine 
+                            data={totalByCategories} 
+                            x="key" 
+                            y="total" 
+                            animate 
+                            interpolation="natural" 
+                            labels={totalByCategories.map(expense => expense.total)}
+                            style={{
+                            data: {
+                                stroke: "#113259",
+                                strokeWidth: 3,
+                            }
+                            }}
+                            labelComponent={
+                            <VictoryLabel 
+                                textAnchor="end" 
+                                verticalAnchor="start" 
+                                dy={20} 
+                                style={[
+                                { fill: "#6D7278", fontSize: 16 }
+                                ]}
+                            />
+                            }
+                        />
+                    </VictoryChart>
                 </Content>
             }
         </Container>
