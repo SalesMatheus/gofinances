@@ -56,23 +56,23 @@ function AuthProvider({ children }: AuthProviderProps) {
             const { type, params } = await AuthSession.
             startAsync({ authUrl }) as AuthorizationResponse;
             
-            // if(type != 'success') {
-            //     const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
-            //     const userInfo = await response.json();
+            if(type != 'success') {
+                const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`);
+                const userInfo = await response.json();
 
                 const userLogged = {
-                    id: "1",
-                    email: "matheus@gmail.com",
-                    name: "Matheus",
-                    // photo: userInfo.picture
+                    id: userInfo.id,
+                    email: userInfo.email,
+                    name: userInfo.given_name,
+                    photo: userInfo.picture
                 };
                 
                 setUser(userLogged);
                 
                 await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
-            // }
+            }
             
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
             
         }
@@ -102,7 +102,7 @@ function AuthProvider({ children }: AuthProviderProps) {
                 await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
             }
 
-        } catch (error) {
+        } catch (error: any) {
             throw new Error(error);
             
         }

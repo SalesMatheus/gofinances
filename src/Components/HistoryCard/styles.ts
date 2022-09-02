@@ -5,7 +5,7 @@ interface ContainerProps {
     color: string;
 }
 
-export const Container = styled.View<ContainerProps>`
+export const Container = styled.TouchableOpacity<ContainerProps>`
     width: 100%;
 
     background-color: ${({ theme }) => theme.colors.shape};

@@ -47,12 +47,18 @@ interface CategoryData {
 }
 
 export function Resume() {
+    const [selected, setSelected] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date);
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
 
     const theme = useTheme();
     const { user } = useAuth();
+
+    function handleCardOnPress(id: string) {
+        setSelected(prev => prev === id ? "" : id);
+    
+    }
 
     function handleDateChange(action: 'next' | 'prev') {
 
@@ -171,11 +177,18 @@ export function Resume() {
                             innerRadius={80}
                             data={totalByCategories}
                             colorScale={totalByCategories.map(category => category.color)}
+                            animate={{ 
+                                duration: 1000,
+                            }}
                             style={{
                                 labels: { 
                                     fontSize: RFValue(18),
                                     fontWeight: 'bold',
-                                    fill: theme.colors.shape
+                                    fill: theme.colors.shape,
+                                    display: ({ datum }) => (datum.key === selected || selected === "") ? "block" : "none",
+                                },
+                                data: {
+                                    fill: ({ datum }) => (datum.key === selected || selected === "") ? datum.color : theme.colors.text,
                                 }
                             }}
                             labelRadius={100}
@@ -190,9 +203,10 @@ export function Resume() {
                     
                     {
                         totalByCategories.map(item => (
-                            <HistoryCard 
+                            <HistoryCard
+                                onPress={() => handleCardOnPress(item.key)}
                                 key={item.key}
-                                title={item.name}
+                                title={item.key}
                                 amount={item.totalFormatted}
                                 color={item.color}
                             />
