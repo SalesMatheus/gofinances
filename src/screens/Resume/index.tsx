@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator } from 'react-native'; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { VictoryPie } from 'victory-native';
+import { VictoryAxis, VictoryChart, VictoryLabel, VictoryLegend, VictoryLine, VictoryPie, VictoryScatter, VictoryTheme } from 'victory-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import { addMonths, subMonths, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -47,12 +47,18 @@ interface CategoryData {
 }
 
 export function Resume() {
+    const [selected, setSelected] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date);
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
 
     const theme = useTheme();
     const { user } = useAuth();
+
+    function handleCardOnPress(id: string) {
+        setSelected(prev => prev === id ? "" : id);
+    
+    }
 
     function handleDateChange(action: 'next' | 'prev') {
 
@@ -165,32 +171,83 @@ export function Resume() {
                     </MonthSelect>
 
                     <ChartContainer>
-                        <VictoryPie 
+                        <VictoryPie
+                            cornerRadius={8}
+                            padAngle={3}
+                            innerRadius={80}
                             data={totalByCategories}
                             colorScale={totalByCategories.map(category => category.color)}
+                            animate={{ 
+                                duration: 1000,
+                            }}
                             style={{
                                 labels: { 
                                     fontSize: RFValue(18),
                                     fontWeight: 'bold',
-                                    fill: theme.colors.shape
+                                    fill: theme.colors.shape,
+                                    display: ({ datum }) => (datum.key === selected || selected === "") ? "block" : "none",
+                                },
+                                data: {
+                                    fill: ({ datum }) => (datum.key === selected || selected === "") ? datum.color : theme.colors.text,
                                 }
                             }}
                             labelRadius={100}
                             x="percent"
                             y="total"
                         />
+                        {/* <VictoryLegend 
+                            data={totalByCategories} 
+                            colorScale={totalByCategories.map(category => category.color)}
+                        /> */}
                     </ChartContainer>
                     
                     {
                         totalByCategories.map(item => (
-                            <HistoryCard 
+                            <HistoryCard
+                                onPress={() => handleCardOnPress(item.key)}
                                 key={item.key}
-                                title={item.name}
+                                title={item.key}
                                 amount={item.totalFormatted}
                                 color={item.color}
                             />
                         ))
                     }
+                    <VictoryChart theme={VictoryTheme.material} >
+                        <VictoryAxis/>
+                        <VictoryScatter 
+                            size={5} 
+                            data={totalByCategories} 
+                            x="key"
+                            y="total"
+                            style={{ 
+                            data: { fill: "#113259" } 
+                            }}
+                        />
+                        <VictoryLine 
+                            data={totalByCategories} 
+                            x="key" 
+                            y="total" 
+                            animate 
+                            interpolation="natural" 
+                            labels={totalByCategories.map(expense => expense.total)}
+                            style={{
+                            data: {
+                                stroke: "#113259",
+                                strokeWidth: 3,
+                            }
+                            }}
+                            labelComponent={
+                            <VictoryLabel 
+                                textAnchor="end" 
+                                verticalAnchor="start" 
+                                dy={20} 
+                                style={[
+                                { fill: "#6D7278", fontSize: 16 }
+                                ]}
+                            />
+                            }
+                        />
+                    </VictoryChart>
                 </Content>
             }
         </Container>
